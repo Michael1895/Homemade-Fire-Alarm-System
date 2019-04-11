@@ -1,0 +1,92 @@
+int buttonState = 0;         // current state of the button
+int lastButtonState = 0;     // previous state of the button
+int buttonPushCounter = 0;   // push counter
+int check;
+float temp0, temp1, temp2;
+
+void setup()
+{
+    // put your setup code here, to run once:
+    pinMode(2, OUTPUT); // configure piezo as output
+    pinMode(3, OUTPUT); // configure piezo as output
+    pinMode(4, OUTPUT); // configure led as output
+    pinMode(5, OUTPUT); // configure led as output
+    pinMode(6, INPUT);  // configure button as input
+    Serial.begin(9600);
+}
+
+void loop() 
+    {
+    buttonState = digitalRead(6);  // get button state
+    
+    if (buttonState != lastButtonState) 
+    {
+    if(buttonState == LOW)
+    {
+    buttonPushCounter++;
+    Serial.println("Pushed!");
+    Serial.print("number of button pushes: ");
+    Serial.println(buttonPushCounter); 
+    }  
+    delay(50);
+    }
+    lastButtonState = buttonState;
+    
+    if (buttonPushCounter % 2 == 0) 
+    {
+    temp0 = analogRead(0); //read temperature
+    temp0 = temp0 * 0.48828125;
+    
+    Serial.print("TEMPERATURE (0) = ");
+    Serial.print(temp0);
+    Serial.print("*C");
+    Serial.println();
+
+    temp1 = analogRead(1); //read temperature
+    temp1 = temp1 * 0.48828125;
+    
+    Serial.print("TEMPERATURE (1) = ");
+    Serial.print(temp1);
+    Serial.print("*C");
+    Serial.println();
+
+    temp2 = analogRead(2); //read temperature
+    temp2 = temp2 * 0.48828125;
+    
+    Serial.print("TEMPERATURE (2) = ");
+    Serial.print(temp2);
+    Serial.print("*C");
+    Serial.println();
+
+
+      if (temp0 > 31 || temp1 > 31 || temp2 > 31)
+      {
+      Serial.println("FIRE! FIRE!");
+      } 
+      while (temp0 > 31 || temp1 > 31 || temp2 > 31)
+      {           
+      digitalWrite(4, HIGH); // turn LED on
+      digitalWrite(5, HIGH); // turn LED on
+      tone(2, 1000); // make piezo buzz
+      tone(3, 1000); // make piezo buzz
+      delay(500); // wait 0.5s
+      digitalWrite(4, LOW); // turn LED off
+      digitalWrite(5, LOW); // turn LED off
+      tone(2, 800); // make piezo buzz lower
+      tone(3, 800); // make piezo buzz lower
+      delay(500); // wait 0.5s   
+      check = digitalRead(6);
+      if (check != buttonState)
+      {
+      break;
+      }
+      }
+      } 
+      else 
+      {
+      digitalWrite(3, LOW); // turn LED off
+      digitalWrite(4, LOW); // turn LED off
+      noTone(2);            // Stop sound...
+      noTone(3);            // Stop sound...
+      }
+      }
