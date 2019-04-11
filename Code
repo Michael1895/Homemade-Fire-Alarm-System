@@ -6,7 +6,6 @@ float temp0, temp1, temp2;
 
 void setup()
 {
-    // put your setup code here, to run once:
     pinMode(2, OUTPUT); // configure piezo as output
     pinMode(3, OUTPUT); // configure piezo as output
     pinMode(4, OUTPUT); // configure led as output
