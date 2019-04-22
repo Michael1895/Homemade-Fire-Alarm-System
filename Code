@@ -83,8 +83,8 @@ void loop()
       } 
       else 
       {
-      digitalWrite(3, LOW); // turn LED off
       digitalWrite(4, LOW); // turn LED off
+      digitalWrite(5, LOW); // turn LED off
       noTone(2);            // Stop sound...
       noTone(3);            // Stop sound...
       }
